@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import reactor.core.Environment;
@@ -120,6 +121,14 @@ public class PromiseController {
 
 //        deferred.accept(new ResponseEntity<String>("Hello World! testResponseEntity", HttpStatus.OK));
         return deferred.compose();
+    }
+
+    @RequestMapping("/greet")//spring mvc 异步
+    public DeferredResult<String> greet(){
+        DeferredResult<String> result = new DeferredResult<String>();
+        EventWrapper<String> wrapper = new EventWrapper<String>(result, "greet");//参数设置
+        reactor.notify("greet", Event.wrap(wrapper));
+        return result;
     }
 
 

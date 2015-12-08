@@ -30,4 +30,9 @@ public class DeferredHandler {
     public void test(Deferred<String, Promise<String>> d) {
         d.accept("test");
     }
+
+    @Selector(value = "greet", reactor = "@reactor")
+    public void greet(EventWrapper<String> eventWrapper){
+        eventWrapper.getDeferredResult().setResult("greet");
+    }
 }
